@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy vallentines baby</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #FFF5F5;
+            --rose-text: #D63384;
+            --soft-gray: #5A5A5A;
+            --envelope-color: #f08080;
+            --white-glass: rgba(255, 255, 255, 0.8);
+        }
+
+        body, html { margin: 0; padding: 0; height: 100%; background-color: var(--bg-color); font-family: 'Playfair Display', serif; overflow: hidden; }
+
+        /* --- Background Animation --- */
+        .scenery { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .petal { position: absolute; background-color: #ffb7c5; border-radius: 150% 0 150% 0; opacity: 0.6; animation: fall linear infinite; }
+        @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
+
+        /* --- Page Logic --- */
+        .page { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.8s ease-in-out; opacity: 0; visibility: hidden; z-index: 10; text-align: center; padding: 20px; box-sizing: border-box; }
+        .active { opacity: 1; visibility: visible; }
+
+        h1 { font-family: 'Dancing Script', cursive; color: var(--rose-text); font-size: 3.5rem; margin: 10px 0; }
+        p { color: var(--soft-gray); font-size: 1.1rem; line-height: 1.6; }
+
+        /* --- Specialized Sections --- */
+        .content-card { background: var(--white-glass); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 500px; border: 1px solid white; }
+        .poem { font-style: italic; color: #444; margin: 20px 0; line-height: 1.8; font-size: 1.2rem; }
+        
+        /* --- Envelope Styles --- */
+        .envelope-wrapper { position: relative; width: 280px; height: 180px; background: var(--envelope-color); border-radius: 0 0 5px 5px; margin-top: 50px; cursor: pointer; display: none; }
+        .envelope-wrapper::before { content: ""; position: absolute; top: -140px; left: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-bottom: 140px solid var(--envelope-color); transition: 0.6s; transform-origin: bottom; z-index: 4; }
+        .open-env::before { transform: rotateX(180deg); }
+        .letter-content { position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px; background: #fffdf5; padding: 15px; z-index: 2; transition: 0.8s; font-family: 'Dancing Script', cursive; font-size: 1.2rem; overflow: hidden;}
+        .open-env .letter-content { transform: translateY(-110px); height: 220px; z-index: 5; box-shadow: 0 -10px 20px rgba(0,0,0,0.1); }
+
+        /* --- Quiz & Buttons --- */
+        .btn { background: var(--rose-text); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; margin: 10px; transition: 0.3s; font-family: inherit; }
+        .btn:hover { transform: scale(1.05); background: #b52a6f; }
+        .secret-note { display: none; color: #d63384; font-weight: bold; margin-top: 15px; animation: fadeIn 2s; }
+
+        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    </style>
+</head>
+<body>
+
+    <div class="scenery" id="scenery"></div>
+
+    <div id="page1" class="page active">
+        <h1>Sajay its been a one year</h1>
+        <div class="content-card">
+            <p>Enter our secret date to begin.</p>
+            <input type="password" id="passwordInput" placeholder="our day" style="padding: 12px; border-radius: 20px; border: 1px solid var(--rose-text); text-align: center; outline: none;">
+            <br><button class="btn" onclick="checkPassword()">Unlock Our Story</button>
+        </div>
+    </div>
+
+    <div id="page2" class="page">
+        <h1>Beautiful Memories</h1>
+        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+            <div style="width:160px; height:160px; border:8px solid white; transform: rotate(-3deg); box-shadow: 0 10px 20px rgba(0,0,0,0.1);"><img src="https://www.pccoepune.com/images/popup-gallery/10.jpeg" style="width:100%; height:100%; object-fit:cover;"></div>
+            <div style="width:160px; height:160px; border:8px solid white; transform: rotate(4deg); box-shadow: 0 10px 20px rgba(0,0,0,0.1);"><img src="https://i.pinimg.com/236x/7d/dd/49/7ddd494292e09115e2ec77d7b0f84a83.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+            <div style=" width:160px; border:8px solid white;transform: rotate(4deg); box-shadow: 0 10px 20px rgba(0,0,0,0.1);"><img src="https://www.templetimings.com/wp-content/uploads/2018/09/Dagdusheth-Ganpati-Temple.png" style="width:100%; height: 100%;object-fit:cover;"></div>
+        </div>
+        <p>You're my favorite chapter in this book of life.</p>
+        <button class="btn" onclick="nextPage(3)">Continue...</button>
+    </div>
+
+    <div id="page3" class="page">
+        <div id="questionArea">
+            <h1>Ajay...</h1>
+            <p style="font-size: 2rem;">Will you be my Valentine sorry sorry will you be my jeevansathi?</p>
+            <button class="btn" onclick="revealLetter()">YES!</button>
+            <button id="noBtn" class="btn" style="background: #999;" onmouseover="moveNo()">No</button>
+        </div>
+
+        <div class="envelope-wrapper" id="envelope" onclick="openEnvelope()">
+            <div class="letter-content">
+                <strong>My Dearest Dagad,</strong><br>
+                Meeting you was fate, becoming your friend was a choice, but falling in love with you was beyond my control.<br><br>
+                <span>Love, your sakhi. </span>
+            </div>
+        </div>
+        <div id="secretNote" class="secret-note">SECRET NOTE: I have a surprise gift waiting for you in person! 😉</div>
+        <button id="toRules" class="btn" style="display:none; margin-top: 30px;" onclick="nextPage(4)">Read Our Rules</button>
+    </div>
+
+    <div id="page4" class="page">
+        <h1>Our Love Rules</h1>
+        <div class="content-card">
+            <div class="poem">
+                "In our world, the sun shines bright,<br>
+                Even in the middle of the night.<br>
+                Rule number one, we never stay mad,<br>
+                Life is too short to ever be sad."
+            </div>
+            <ul style="text-align: left; color: var(--soft-gray); font-size: 0.9rem;">
+                <li>Rule #1: जसा आहेस तसाच माझ्यावर प्रेम कर…
+                                कारण मी तुझ्यावर तुझ्या खर्‍या रूपावर प्रेम केलंय. 💗 .</li>
+                <li>Rule #2:If I can't sleep, you are my official overthinking counselor.</li>
+                <li>Rule #3: You are legally obligated to laugh at my bad jokes..</li>
+                <li>Rule #4: No going to bed without a 'Goodnight'</li>
+                <li>Rule #5: मला परफेक्ट मुलगा नको… मला फक्त तू हवायस —जसा आहेस तसाच, मनापासून माझ्यावर प्रेम करणारा. 🌸</li>
+                <li>Rule #6: You must send me selfies so I can admire my man..</li>
+                <li>Rule #7: No Matter the Ending, We Try Again.
+                    Seven lives. Seven chances. One love story.</li>
+            </ul>
+            <button class="btn" onclick="nextPage(5)">Final Quiz!</button>
+        </div>
+    </div>
+
+    <div id="page5" class="page">
+        <h1>The 'Us' Test</h1>
+        <div class="content-card">
+            <p>1. Tula mi awadte ka?</p>
+            <button class="btn" onclick="alert('Definitly! 😂')">Ho HO Ho</button>
+            <button class="btn" onclick="alert('very good ')">Agg ho g</button>
+            
+            <p style="margin-top:20px;">2. Who is always right?</p>
+            <button class="btn" onclick="alert(' wohhh Correct Jawab! 👑')">Sakhi</button>
+            <button class="btn" onclick="alert('Sakhi is an angel, stop lying!')">Dagadu</button>
+
+            <h2 style="font-family: 'Dancing Script'; margin-top: 30px; color: var(--rose-text);">I Love You Always!</h2>
+        </div>
+    </div>
+
+    <script>
+        // Background elements
+        function createPetal() {
+            const petal = document.createElement('div');
+            const isHeart = Math.random() > 0.7;
+            petal.className = 'petal';
+            petal.innerHTML = isHeart ? '❤️' : '';
+            if(!isHeart) { petal.style.width = '15px'; petal.style.height = '15px'; }
+            else { petal.style.background = 'none'; petal.style.fontSize = '20px'; }
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            document.getElementById('scenery').appendChild(petal);
+            setTimeout(() => petal.remove(), 7000);
+        }
+        setInterval(createPetal, 300);
+
+        function checkPassword() {
+            if(document.getElementById('passwordInput').value === "1602") nextPage(2);
+            else alert("Try our special date!");
+        }
+
+        function nextPage(num) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page' + num).classList.add('active');
+        }
+
+        function moveNo() {
+            const btn = document.getElementById('noBtn');
+            btn.style.position = 'fixed';
+            btn.style.left = Math.random() * 80 + 'vw';
+            btn.style.top = Math.random() * 80 + 'vh';
+        }
+
+        function revealLetter() {
+            document.getElementById('questionArea').style.display = 'none';
+            document.getElementById('envelope').style.display = 'block';
+        }
+
+        function openEnvelope() {
+            const env = document.getElementById('envelope');
+            env.classList.add('open-env');
+            setTimeout(() => {
+                document.getElementById('secretNote').style.display = 'block';
+                document.getElementById('toRules').style.display = 'inline-block';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
